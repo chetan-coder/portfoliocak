@@ -1,3 +1,27 @@
+// Pinned Pyodide build used to run Python in the browser when the remote
+// runner backend is unreachable. Pinned rather than "latest" so a CDN
+// release cannot change behaviour underneath the lessons.
+const PYODIDE_VERSION = 'v0.28.3';
+const PYODIDE_BASE = `https://cdn.jsdelivr.net/pyodide/${PYODIDE_VERSION}/full/`;
+
+// One interpreter shared by every runner on the page. The first Run pays the
+// download; later runs and other boxes reuse it.
+let pyodidePromise = null;
+
+function loadPyodideOnce(onProgress) {
+  if (!pyodidePromise) {
+    pyodidePromise = (async () => {
+      onProgress?.();
+      const { loadPyodide } = await import(`${PYODIDE_BASE}pyodide.mjs`);
+      return loadPyodide({ indexURL: PYODIDE_BASE });
+    })().catch((err) => {
+      pyodidePromise = null;   // let a later Run retry instead of caching failure
+      throw err;
+    });
+  }
+  return pyodidePromise;
+}
+
 export class CodeExecutor {
   constructor({ editor, outputElement, execTimeElement, languageSelect, pythonURI, javaURI, fetchOptions = {} } = {}) {
     this.editor = editor;
@@ -54,6 +78,8 @@ export class CodeExecutor {
       // rather than only on localhost.
       if (lang === 'javascript') {
         this.runJavaScriptFallback(code, startTime);
+      } else if (lang === 'python') {
+        await this.runPythonFallback(code, startTime);
       } else {
         outputDiv.textContent = 'Error: ' + err.message;
         if (execTimeSpan) execTimeSpan.textContent = '';
@@ -82,6 +108,63 @@ export class CodeExecutor {
       }
     } catch (evalErr) {
       outputDiv.textContent = 'Error: ' + evalErr.message;
+      if (execTimeSpan) execTimeSpan.textContent = '';
+    }
+  }
+
+  async runPythonFallback(code, startTime) {
+    const outputDiv = this.outputElement;
+    const execTimeSpan = this.execTimeElement;
+
+    let pyodide;
+    try {
+      pyodide = await loadPyodideOnce(() => {
+        outputDiv.textContent = '\u23f3 Loading Python for the browser (first run only, ~10MB)...';
+      });
+    } catch (loadErr) {
+      outputDiv.textContent = 'Error: could not load the Python runtime (' + loadErr.message + ')';
+      if (execTimeSpan) execTimeSpan.textContent = '';
+      return;
+    }
+
+    outputDiv.textContent = '\u23f3 Running...';
+    const chunks = [];
+    // Pyodide's batched writer fires once per line and strips the newline,
+    // so put it back or every print() collapses onto one line.
+    const write = (text) => chunks.push(text + '\n');
+
+    pyodide.setStdout({ batched: write });
+    pyodide.setStderr({ batched: write });
+
+    // input() reads stdin, which does not exist in a browser tab. Point it at
+    // window.prompt so lessons that ask for input actually ask.
+    pyodide.globals.set('__runner_prompt', (message) => {
+      const answer = window.prompt(String(message ?? ''));
+      return answer === null ? '' : answer;
+    });
+
+    const started = Date.now();
+    try {
+      await pyodide.runPythonAsync(`
+import builtins as __builtins
+
+def __runner_input(prompt=""):
+    if prompt:
+        print(prompt, end="")
+    return __runner_prompt(prompt)
+
+__builtins.input = __runner_input
+`);
+      await pyodide.runPythonAsync(code);
+      const text = chunks.join('').replace(/\n$/, '');
+      outputDiv.textContent = text.length ? text : '[no output]';
+      if (execTimeSpan) {
+        execTimeSpan.textContent = `\u23f1Execution time: ${Date.now() - started}ms (ran in browser)`;
+      }
+    } catch (pyErr) {
+      const text = chunks.join('');
+      // Pyodide puts the real Python traceback in the error message.
+      outputDiv.textContent = (text ? text + '\n' : '') + String(pyErr.message || pyErr);
       if (execTimeSpan) execTimeSpan.textContent = '';
     }
   }
