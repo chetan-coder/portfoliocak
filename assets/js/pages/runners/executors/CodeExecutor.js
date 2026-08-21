@@ -48,7 +48,11 @@ export class CodeExecutor {
         execTimeSpan.textContent = `⏱Execution time: ${Date.now() - startTime}ms`;
       }
     } catch (err) {
-      if (lang === 'javascript' && isLocalhost) {
+      // The remote runner backend only sends CORS headers to allow-listed
+      // origins, so a fork served from any other domain gets "Failed to
+      // fetch". JavaScript can still run in the browser, so always fall back
+      // rather than only on localhost.
+      if (lang === 'javascript') {
         this.runJavaScriptFallback(code, startTime);
       } else {
         outputDiv.textContent = 'Error: ' + err.message;
@@ -74,7 +78,7 @@ export class CodeExecutor {
 
       outputDiv.textContent = logs.length > 0 ? logs.join('\n') : '[no output]';
       if (execTimeSpan) {
-        execTimeSpan.textContent = `⏱Execution time: ${Date.now() - startTime}ms (local fallback)`;
+        execTimeSpan.textContent = `⏱Execution time: ${Date.now() - startTime}ms (ran in browser)`;
       }
     } catch (evalErr) {
       outputDiv.textContent = 'Error: ' + evalErr.message;
