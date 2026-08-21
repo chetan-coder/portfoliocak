@@ -5,7 +5,7 @@ hide: true
 show_reading_time: false
 ---
 
-Hi! Our names are Kashyap (Kash) Tubati, Aaditya Prem, and Chetan Tiduwar.
+Hi! Our names are Kashyap Tubati, Aaditya Prem, and Chetan Tiduwar.
 
 ### Development Environment
 
