@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Capstone Ideation — Four Project Options
-description: Four capstone projects our team reviewed, with what each one is, why we considered it, and what we would change.
+description: Four capstone projects our team reviewed, with what each one is, why we considered it, what we would change, and how we would build it.
 permalink: /capstone/ideation
 toc: True
 ---
@@ -40,7 +40,7 @@ toc: True
 
 **Date started:** 9/1/26
 
-These are four separate capstone options our team reviewed. They are independent projects with nothing to do with each other, and we are writing all four up the same way so we have a clear record of each. For each one we cover what it is, why we picked it, and what we would change.
+These are four separate capstone options our team reviewed. They are independent projects with nothing to do with each other, and for each one we cover what it is, why we picked it, and what we would change. Friends of Poway Seniors is the one we are actually doing, so it also carries what our changes do and how we would implement them.
 
 ## Project 1 — Friends of Poway Seniors
 
@@ -64,9 +64,11 @@ They added a 24/7 AI chatbot that answers in plain English, an interactive 75-ba
 
 ### Why we picked it
 
-We picked Friends of Poway Seniors because it's a real local nonprofit serving people with genuine accessibility needs, and because the site already has interactive features we can extend instead of starting from zero. Improvements for this audience are measurable rather than cosmetic — if an older visitor can't read the text or find the volunteer form, that's a real failure we can fix and test.
+We picked Friends of Poway Seniors because the people using this site are older adults, and design decisions that are invisible to us — text size, button size, whether a page still works when someone zooms in — decide whether they can use it at all. That makes every change we ship testable against a real person's experience instead of our own taste.
 
-### What we would change / improve
+We also want to work on something where the interactive parts serve the mission directly: the bingo game and the volunteer signup are how this organization actually reaches people, not decoration on top of a brochure.
+
+### What we would change
 
 - Remove the developer status banner from the Bingo page. It currently displays "API Ready · Bingo Volunteer API is running!" to every visitor — that's a debug message being shown to seniors.
 - Raise the base font size and enlarge buttons and tap targets across the site. The audience is older adults and the current body text is standard size.
@@ -74,6 +76,27 @@ We picked Friends of Poway Seniors because it's a real local nonprofit serving p
 - Add a plain-language explanation above the volunteer form saying what signing up commits you to, and show a clear confirmation message after the form is submitted.
 - Put real upcoming event dates on the Events pages so a visitor knows what's happening this week without having to open the event predictor.
 - Test the whole site at 200% browser zoom, which is a normal setting for this audience, and fix anything that overlaps or gets cut off.
+
+### What our changes do and how it helps
+
+Together these changes turn a site that works for a developer testing it into a site that works for an 80-year-old on a tablet. Removing the debug banner and labeling the chat button clears away the things that make a first-time visitor hesitate.
+
+Bigger text, bigger buttons, and a layout that survives 200% zoom mean someone can read and tap without asking a family member for help. Plain wording on the volunteer form plus a confirmation message means a person knows their signup actually went through instead of wondering and calling to check. Real event dates mean a visitor can find out what's happening this week on their own.
+
+The measurable result we would look for is more volunteer signups completed without staff help, and fewer phone calls asking questions the site should already answer.
+
+### How we would implement it
+
+1. All three of us clone the site and get it running locally in the first work session, then split the cards on our Kanban board.
+2. We split the build three ways:
+
+    | Person | What they build |
+    |---|---|
+    | Chetan | Front-end cleanup: delete the debug banner, give the chat button a visible label and keyboard access, then walk the site at 200% zoom and fix anything that overlaps. |
+    | Aaditya | Accessibility pass: raise the base font size, enlarge buttons and tap targets, check color contrast, and test on a phone and a tablet. |
+    | Kashyap | Volunteer flow: add the plain-language explainer above the form, add required-field validation, show a confirmation after submit, and put real event dates on the Events pages. |
+
+3. All three of us test each other's work on a different device, log every bug as a Sub Issue, then rehearse the demo end to end.
 
 <figure class="shot">
   <img src="{{site.baseurl}}/images/ideation/fops-bingo-volunteer.jpg" alt="The Friends of Poway Seniors Bingo page. Under the heading 'Friends of Poway Seniors Bingo — Weekly Games, Community, Prizes' sit two tabs, 'Info &amp; Volunteer' and 'Play Bingo', followed by a green status banner reading 'API Ready · Bingo Volunteer API is running!'. Below, a Bingo panel lists the Mickey Cafagna Community Center address, Sycamore Hall, and Tuesday sales and game times, next to a 'Volunteer Opportunities' form with First Name, Last Name, and Email Address fields.">
@@ -115,9 +138,13 @@ They built secure login with Google authorization, real-time messaging between m
 
 ### Why we picked it
 
-We picked the Poway Woman's Club because it's a 65-year-old organization with a real membership to serve, and because the existing build already handles authentication and admin tools — which means we can spend our time on the parts members and visitors actually touch. The club also holds open monthly meetings that visitors can attend without an RSVP, so we can get feedback from real users instead of guessing.
+We picked the Poway Woman's Club because it is a 65-year-old organization with a real membership, real scholarships, and real monthly meetings — which means the site has an actual job to do and we can tell whether we did it.
 
-### What we would change / improve
+The club holds open meetings that anyone can attend without an RSVP, so we can put our work in front of the people it is for and change it based on what they say, instead of guessing at what a user wants.
+
+We are also interested in the problem of a site built for members that strangers keep landing on, because solving that means thinking about two very different audiences on the same pages.
+
+### What we would change
 
 - Add a way to donate. The navigation has About, Newsletter, Social, and Log in — there is currently no path for a visitor to give money to a 501(c)(3) nonprofit.
 - Explain the member portal before the login wall. A visitor sees "Member Portal" and "Log in" with no description of what's inside or how a person becomes a member.
@@ -166,7 +193,7 @@ That changes the job: any work here would start from the current site, not the o
 
 We looked at D.A.D. because their site still has real, fixable problems, not just cosmetic ones, and because it's a nonprofit making a genuine impact locally, so improving their site felt like it mattered more than working on a random business.
 
-### What we would change / improve
+### What we would change
 
 - Fix the broken contact email in the site footer. It currently reads `gtaylor@doingexcpetionaldeeds.org` — "exceptional" is misspelled, so mail sent to that address never reaches D.A.D.
 - Add impact copy to each donation amount. The form offers $25, $50, $100, and $250 but never tells a donor what any of those amounts actually pays for.
@@ -224,7 +251,7 @@ On top of that sits "Poway Progression," a sign-in system that tracks XP, levels
 
 We looked at the Poway Symphony Orchestra project because it went beyond a normal redesign by adding real interactive features like the games and audio previews, which made the site feel more engaging and creative than a typical nonprofit or business site.
 
-### What we would change / improve
+### What we would change
 
 - Make sure a first-time visitor who never signs in can still play every game. Right now the "Sign In To Save XP" panel is the first thing that greets you, and it should explain what signing in adds rather than reading like a gate.
 - Fix the Poway Progression panel's placement. At some window sizes it floats over the concert cards and covers the program notes for one of the concerts.
