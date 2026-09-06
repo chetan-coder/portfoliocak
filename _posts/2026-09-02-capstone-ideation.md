@@ -68,7 +68,9 @@ We picked Friends of Poway Seniors because the people using this site are older 
 
 We also want to work on something where the interactive parts serve the mission directly: the bingo game and the volunteer signup are how this organization actually reaches people, not decoration on top of a brochure.
 
-### What we would change
+### Immediate changes
+
+These are the fixes we can ship in the first two weeks, before the bigger build starts.
 
 - Remove the developer status banner from the Bingo page. It currently displays "API Ready · Bingo Volunteer API is running!" to every visitor — that's a debug message being shown to seniors.
 - Raise the base font size and enlarge buttons and tap targets across the site. The audience is older adults and the current body text is standard size.
@@ -77,26 +79,78 @@ We also want to work on something where the interactive parts serve the mission 
 - Put real upcoming event dates on the Events pages so a visitor knows what's happening this week without having to open the event predictor.
 - Test the whole site at 200% browser zoom, which is a normal setting for this audience, and fix anything that overlaps or gets cut off.
 
+### Long-term build
+
+These are the projects we plan to build across the year. Each one exists because the people using this site are older adults, and each one is meant to be used, not just demonstrated.
+
+#### Scam Defense Trainer
+
+Older adults are targeted by scams more than any other age group, and the advice they usually get is a pamphlet. We want to build practice instead of warnings — a game where someone sees a message and decides whether to trust it, then finds out immediately why they were right or wrong.
+
+- Build a scenario library of side-by-side pairs: a real message and a scam version of the same thing — a text from a bank, an email about a package, a phone-call transcript, a pop-up warning, a charity request.
+- Let the player answer "trust it" or "don't trust it," then tap the part of the message that gave it away.
+- Show an explanation after every round that names the specific red flag: the urgency, the misspelled sender address, the request for a gift card, the phone number that doesn't match.
+- Track which scam types a player keeps missing and bring those back more often, so practice concentrates where the person is actually weak.
+- Cover the scams that actually hit this age group: Medicare and Social Security impersonation, the grandparent emergency call, tech-support pop-ups, gift-card payment requests, and fake charity drives.
+- Let a player print a one-page red-flags card built from the scenarios they got wrong, so there's something to keep by the phone.
+
+#### Bingo, digital and multiplayer
+
+Friends of Poway Seniors already runs bingo in person at the Mickey Cafagna Community Center. A digital version extends that to people who can't get there, and a multiplayer version keeps the part that actually matters — playing with other people.
+
+- Build a single-player digital bingo game first: large-print card, one-tap daubing, an auto-caller that speaks and displays each number, and adjustable call speed.
+- Add a multiplayer mode with a room code, so a group can play the same card set at the same time from home.
+- Keep every player's board in sync with one shared caller, so nobody falls behind or gets a different number.
+- Let a player reconnect after losing wifi without losing their card or their progress.
+- Add simple social touches: see who else is in the room, send a quick reaction, and call bingo out loud to the group.
+- Connect it to the real weekly games so remote players can join the same session as the room.
+
+#### Movement games
+
+Sitting still is its own health problem. These are short, seated exercises disguised as games, using only a webcam — nothing to buy, nothing to install.
+
+- Build a head-nod game that uses the webcam to detect head movement and turns a seated neck-and-shoulder routine into a scored activity.
+- Add a reach-and-tap game where a player moves their arms to hit targets on screen, at a pace they set.
+- Track range and repetitions over time so a player can see improvement, and keep the numbers encouraging rather than clinical.
+- Make every exercise seated by default, with a stop button always visible and a clear note to check with a doctor first.
+- Process all camera data in the browser. No video is uploaded, stored, or sent anywhere, and the site says so plainly before the camera turns on.
+
+#### Supporting features we would add
+
+These make the three game systems above actually reachable for the audience.
+
+- A read-aloud mode across the whole site, plus accessibility settings — text size, contrast, reduced motion — that are remembered on the next visit instead of reset every time.
+- A community scam report wall where visitors can submit scam attempts they've received, reviewed by staff before posting, feeding real local examples back into the Scam Defense Trainer.
+- Progress tracking with streaks, plain-English badges, and a printable certificate — the reward for finishing a training module should be something a person can hold.
+- A volunteer scheduler that turns the current signup form into a real matching tool: match volunteer availability against bingo shifts and show staff which shifts are still short.
+- A staff dashboard built on the existing event predictor, forecasting how many volunteers and meals each upcoming event will need.
+- A caregiver link so a family member can see that their parent is using the site and get a nudge when they haven't in a while — opt-in only, controlled by the senior.
+
 ### What our changes do and how it helps
 
-Together these changes turn a site that works for a developer testing it into a site that works for an 80-year-old on a tablet. Removing the debug banner and labeling the chat button clears away the things that make a first-time visitor hesitate.
+The immediate fixes clear away the things that stop someone using this site at all: a debug banner shown to visitors, text too small to read, an unlabeled chat button, a volunteer form that never confirms it worked. Those matter, but they are repairs. The long-term build is where the site starts doing something it doesn't do today.
 
-Bigger text, bigger buttons, and a layout that survives 200% zoom mean someone can read and tap without asking a family member for help. Plain wording on the volunteer form plus a confirmation message means a person knows their signup actually went through instead of wondering and calling to check. Real event dates mean a visitor can find out what's happening this week on their own.
+The Scam Defense Trainer turns scam awareness from a warning into practice, and practice is what actually changes behavior — a person who has clicked the wrong message fifteen times in a game recognizes the real one. Digital and multiplayer bingo take an activity this organization already runs and extend it to people who can't make it to the community center, keeping the social part rather than just the game. The movement games give a reason to move that isn't a chore, using a webcam that everyone already has. And the supporting features — read-aloud, saved accessibility settings, progress tracking, a real volunteer scheduler — are what let an older adult use any of it without help.
 
-The measurable result we would look for is more volunteer signups completed without staff help, and fewer phone calls asking questions the site should already answer.
+What we would measure: how many people finish a training module rather than abandoning it, whether repeat players get better at spotting the scam types they missed early on, how many remote players join a bingo session, and whether staff spend less time filling volunteer shifts by phone.
 
 ### How we would implement it
 
-1. All three of us clone the site and get it running locally in the first work session, then split the cards on our Kanban board.
-2. We split the build three ways:
+1. **Phase 1 — Immediate fixes (first two weeks).** All three of us ship the six fixes above so the site is solid before we build on it.
+2. **Phase 2 — Scam Defense Trainer v1 (first quarter).** Ten scenario pairs, scoring, and the explanation screen. Playable and testable end to end before we add anything else.
+3. **Phase 3 — Digital bingo and the accessibility layer (second quarter).** Single-player bingo with the auto-caller, plus read-aloud mode and saved accessibility settings across the site.
+4. **Phase 4 — Multiplayer bingo (third quarter).** Room codes, shared caller state, reconnection. This is the hardest piece, so it gets its own phase.
+5. **Phase 5 — Movement games and progress tracking (fourth quarter).** Head-nod and reach-and-tap games, streaks, badges, printable certificates, and the final demo.
 
-    | Person | What they build |
-    |---|---|
-    | Chetan | Front-end cleanup: delete the debug banner, give the chat button a visible label and keyboard access, then walk the site at 200% zoom and fix anything that overlaps. |
-    | Aaditya | Accessibility pass: raise the base font size, enlarge buttons and tap targets, check color contrast, and test on a phone and a tablet. |
-    | Kashyap | Volunteer flow: add the plain-language explainer above the form, add required-field validation, show a confirmation after submit, and put real event dates on the Events pages. |
+Work distribution — each of us owns one system across the whole year, so we each end up with one substantial algorithmic feature to show:
 
-3. All three of us test each other's work on a different device, log every bug as a Sub Issue, then rehearse the demo end to end.
+| Person | What they build | Algorithmic feature |
+|---|---|---|
+| Chetan Tiduwar (Scrum Master/Developer) | Scam Defense Trainer: scenario library, scoring, explanation screens, printable red-flags card | The adaptive difficulty engine — tracking which scam types a player misses and resurfacing them on a spaced schedule |
+| Kashyap Tubati (Technologist/Developer) | Bingo: single-player engine, then multiplayer rooms, plus the volunteer scheduler | Real-time state sync across players — one shared caller, every board consistent, reconnection without data loss |
+| Aaditya Prem (Technologist/Developer) | Movement games, read-aloud mode, saved accessibility settings, progress and certificates | Head-movement detection from webcam face landmarks — turning raw coordinates into counted, scored repetitions |
+
+We test each phase with real users before moving to the next one, and every phase ends with something that works on its own rather than a piece waiting on the next quarter.
 
 <figure class="shot">
   <img src="{{site.baseurl}}/images/ideation/fops-bingo-volunteer.jpg" alt="The Friends of Poway Seniors Bingo page. Under the heading 'Friends of Poway Seniors Bingo — Weekly Games, Community, Prizes' sit two tabs, 'Info &amp; Volunteer' and 'Play Bingo', followed by a green status banner reading 'API Ready · Bingo Volunteer API is running!'. Below, a Bingo panel lists the Mickey Cafagna Community Center address, Sycamore Hall, and Tuesday sales and game times, next to a 'Volunteer Opportunities' form with First Name, Last Name, and Email Address fields.">
